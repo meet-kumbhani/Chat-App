@@ -32,7 +32,12 @@ const ChatList = () => {
           if (!isSmallScreen && selectedUser === null) {
                setSelectedUser(users[0]);
           }
-     }, [isSmallScreen, selectedUser]);
+
+          if (isSmallScreen && selectedUser !== null) {
+               setSelectedUser(null);
+          }
+     }, [isSmallScreen]);
+
 
      const handleUserClick = (user) => {
           if (isSmallScreen) {

@@ -1,22 +1,36 @@
 import React from 'react';
 import Sidebar from './Sidebar';
 import useWindowWidth from '../Assets/Js/UseWindowWidth';
+import { useLocation } from 'react-router-dom';
 
-const ChatWindow = () => {
+const ChatWindow = ({ user: propUser }) => {
      const width = useWindowWidth();
      const isSmallScreen = width < 940;
 
+     const location = useLocation();
+     const routedUser = location.state?.user || null;
+
+     const user = propUser || routedUser;
+
      const handleCallClick = () => {
-          console.log('Calling...');
+          console.log(`Calling ${user?.name || 'user'}...`);
      };
 
      const handleVideoCallClick = () => {
-          console.log('Starting video call...');
+          console.log(`Starting video call with ${user?.name || 'user'}...`);
      };
 
      const handleSearchClick = () => {
           console.log('Search clicked');
      };
+
+     if (!user) {
+          return (
+               <div className="chat-window d-flex align-items-center justify-content-center" style={{ height: '100%' }}>
+                    <p>No user selected</p>
+               </div>
+          );
+     }
 
      return (
           <div className="chat-app">
@@ -26,13 +40,10 @@ const ChatWindow = () => {
                     <div className="chat-window-header">
                          <div className='d-flex align-items-center gap-2'>
                               <div className="chat-avatar">
-                                   <img
-                                        src="https://randomuser.me/api/portraits/men/11.jpg"
-                                        alt="avatar"
-                                   />
+                                   <img src={user.img} alt={user.name} />
                               </div>
                               <div className="chat-info">
-                                   <h3 className="chat-name">John Doe</h3>
+                                   <h3 className="chat-name">{user.name}</h3>
                                    <p className="chat-status">Online</p>
                               </div>
                          </div>
