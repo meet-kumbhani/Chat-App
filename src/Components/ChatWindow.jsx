@@ -1,15 +1,10 @@
 import React from 'react';
-import Sidebar from './Sidebar';
-import useWindowWidth from '../Assets/Js/UseWindowWidth';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 const ChatWindow = ({ user: propUser }) => {
-     const width = useWindowWidth();
-     const isSmallScreen = width < 940;
-
      const location = useLocation();
      const routedUser = location.state?.user || null;
-
+     const pathName = location.pathname === '/user-chat';
      const user = propUser || routedUser;
 
      const handleCallClick = () => {
@@ -18,10 +13,6 @@ const ChatWindow = ({ user: propUser }) => {
 
      const handleVideoCallClick = () => {
           console.log(`Starting video call with ${user?.name || 'user'}...`);
-     };
-
-     const handleSearchClick = () => {
-          console.log('Search clicked');
      };
 
      if (!user) {
@@ -34,11 +25,15 @@ const ChatWindow = ({ user: propUser }) => {
 
      return (
           <div className="chat-app">
-               {isSmallScreen && <Sidebar />}
 
                <div className="chat-window">
                     <div className="chat-window-header">
                          <div className='d-flex align-items-center gap-2'>
+                              {pathName ? (
+                                   <Link to={'/'} className='nav-link fs-5'>
+                                        <i class="fa-solid fa-arrow-left"></i>
+                                   </Link>) : ''}
+
                               <div className="chat-avatar">
                                    <img src={user.img} alt={user.name} />
                               </div>
@@ -49,9 +44,6 @@ const ChatWindow = ({ user: propUser }) => {
                          </div>
 
                          <div className="chat-actions">
-                              <div onClick={handleSearchClick}>
-                                   <i className="fas fa-search chat-icon"></i>
-                              </div>
                               <div onClick={handleCallClick}>
                                    <i className="fas fa-phone chat-icon"></i>
                               </div>
